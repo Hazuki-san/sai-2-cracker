@@ -1,5 +1,8 @@
 import os, io, shutil, time, re, struct
 
+try: input = raw_input
+except NameError: raw_input = input
+
 def replaceN():
 	# open sai2.exe and find N
 	fsai2 = io.FileIO("sai2.exe", 'r+')
@@ -22,7 +25,7 @@ def replaceN():
 def create_license():
 	sysid = ""
 	while True:
-		sysid = raw_input("System ID: ")
+		sysid = input("System ID: ")
 		
 		# len
 		if len(sysid) != 8:
@@ -63,19 +66,19 @@ def create_license():
 		ans >>= 8
 	
 	if len(slc) > 128:
-		print("internal error.")
+		print("Internal Error!")
 		return False
 	if len(slc) < 128:
 		slc.extend( [0] * (128-len(slc)) )
 
 	# write license
 	try:
-		fslc = io.FileIO("aoba.slc", "w")
+		fslc = io.FileIO("AobaLC.slc", "w")
 		strSlc = struct.pack("<128B", *slc)
 		fslc.write(strSlc)
 		fslc.close()
 	except Exception as e:
-		print("write license.slc failed: maybe no write permission.", e)
+		print("write AobaLC.slc failed: maybe no write permission.", e)
 		return False
 
 	return True
@@ -111,12 +114,12 @@ def docrack():
 	try:
 		shutil.copy("sai2.exe", bakfile)
 	except:
-		print("backup failed: maybe no write permission.")
+		print("Backup Failed: check if you have write permission!")
 		return False
 
 	# check if backup is success
 	if not os.path.isfile(bakfile):
-		print("backup failed: maybe no write permission.")
+		print("Backup Failed: check if you have write permission!")
 		return False
 
 	# create license
@@ -126,14 +129,14 @@ def docrack():
 			os.remove("sai2.exe")
 			os.rename(bakfile, "sai2.exe")
 		except:
-			print("restore backup failed.")
+			print("Restore backup failed!")
 			return False
 
-		print("restore backup success.")
+		print("Restore backup success!")
 		return False
 
 	# close sai
-	while raw_input("Please close SAI if it is opened, type OK to continue: ") != "OK":
+	while input("Please close SAI if it is opened, type OK to continue: ") != "OK":
 		pass
 
 	# replaceN
@@ -143,10 +146,10 @@ def docrack():
 			os.remove("sai2.exe")
 			os.rename(bakfile, "sai2.exe")
 		except:
-			print("Restore backup failed.")
+			print("Restore backup failed!")
 			return False
 
-		print("Restore backup success.")
+		print("Restore backup success!")
 		return False
 
 	return True
@@ -170,4 +173,4 @@ if __name__ == '__main__':
 			print("Crack Success!")
 		else:
 			print("Crack Failed!")
-	raw_input("Press ENTER key to continue...")
+	input("Press ENTER key to continue...")
